@@ -1,33 +1,10 @@
 Assignment 4 - Components
-===
 
-Due: September 25th, by 1:59 PM.
+## Watchlist Maker
 
-For this assignment you will re-implement the client side portion of *either* A2 or A3 using either React or Svelte components. If you choose A3 you only need to use components for the data display / updating; you can leave your login UI as is.
+Austin Peterson
 
-[Svelte Tutorial](https://github.com/cs-4241-26a/cs-4241-26a.github.io/blob/main/using.svelte.md)  
-[React Tutorial](https://github.com/cs-4241-26a/cs-4241-26a.github.io/blob/main/using.react.md)  
+Github repository - https://github.com/apetersongit/a4-austin-peterson
+Render hosting link - https://a4-austin-peterson.onrender.com
 
-This project can be implemented on any hosting service (Glitch, DigitalOcean, Heroku etc.), however, you must include all files in your GitHub repo so that the course staff can view them.
-
-Deliverables
----
-
-Do the following to complete this assignment:
-
-1. Implement your project with the above requirements.
-3. Test your project to make sure that when someone goes to your main page on Render/Heroku/etc., it displays correctly.
-4. Ensure that your project has the proper naming scheme `a4-firstname-lastname` so we can find it.
-5. Fork this repository and modify the README to the specifications below. Be sure to add *all* project files.
-6. Create and submit a Pull Request to the original repo. Name the pull request using the following template: `a4-firstname-lastname`.
-
-Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
----
-
-## Your Web Application Title
-
-your hosting link e.g. http://a4-charlieroberts.me
-
-Include a very brief summary of your project here and what you changed / added to assignment #3. Briefly (3–4 sentences) answer the following question: did the new technology improve or hinder the development experience?
-
-Unlike previous assignments, this assignment will be solely graded on whether or not you successfully complete it. Partial credit will be generously given.
+My website is a "Watchlist Maker" where the user can login, add a film or show (with its streaming service) to a watchlist that's saved to a DataBase, and edit or delete these titles. For A4 I reimplemented the client side of A3 using Svelte. I continued to use Express, MongoDB, and the login system from A3. I added Svelte components for the watchlist form and the watchlist results table. I added Vite and ViteExpress so the Svelte application can be deployed on Render through the Express server. The new technology improved the development experience because the interface is more organized and component based, which I find easier, but setting up Vite and ViteExpress after A3 was difficult.
