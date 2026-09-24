@@ -4,9 +4,17 @@ const express = require( 'express' )
 const { MongoClient, ObjectId } = require( 'mongodb' )
 const session = require('express-session')
 const bcrypt = require('bcryptjs')
+const cors = require('cors')
+const ViteExpress = require('vite-express')
 
 const app = express()
 const port = process.env.PORT || 3000
+
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
 
 app.use(express.json())
 
@@ -34,13 +42,31 @@ app.get('/login.html', function(request, response) {
 })
 
 app.get('/', requireLogin, function(request, response) {
-  response.sendFile(__dirname + '/public/index.html')
+  response.sendFile(__dirname + '/vite-a4/dist/index.html')
 })
+
+app.use(express.static(__dirname + '/vite-a4/dist', {
+  index: false
+}))
 
 app.use('/js', express.static(__dirname + '/public/js'))
 app.use('/css', express.static(__dirname + '/public/css'))
 
-const client = new MongoClient(process.env.MONGODB_URI)
+const mongoUrl = new URL(process.env.MONGODB_URI)
+
+const username = decodeURIComponent(mongoUrl.username)
+const password = decodeURIComponent(mongoUrl.password)
+
+const mongoConnectionString =
+  'mongodb+srv://' +
+  encodeURIComponent(username) +
+  ':' +
+  encodeURIComponent(password) +
+  '@' +
+  mongoUrl.hostname +
+  '/?authSource=admin'
+
+const client = new MongoClient(mongoConnectionString)
 
 const db = client.db('watchlist')
 const collection = db.collection('items')
@@ -181,7 +207,7 @@ const startServer = async function() {
 
     console.log('Connected to MongoDB')
 
-    app.listen(port, function() {
+    ViteExpress.listen(app, port, function() {
       console.log(`Server running on port ${port}`)
     })
   } catch(error) {
@@ -190,115 +216,3 @@ const startServer = async function() {
 }
 
 startServer()
-
-//const addDerivedField = function(item) {
-//  item.dateAdded = new Date().toLocaleDateString()
-//  return item
-//}
-
-//const server = http.createServer( function( request,response ) {
-//  if( request.method === 'GET' ) {
-//    handleGet( request, response )    
-//  }else if( request.method === 'POST' ){
-//    if(request.url === '/submit') {
-//    handlePost( request, response ) 
-//    }else if(request.url === '/edit') {
-//      handleEdit(request, response)
-//    }else if(request.url === '/delete') {
-//      handleDelete(request, response)
-//    }
-//  }
-//})
-
-//const handleGet = function( request, response ) {
-   
-//  if( request.url === '/' ) {
-//    sendFile( response, 'public/index.html' )
-//  }else if(request.url === '/data'){
-//    response.writeHead(200, {
-//      'Content-Type': 'application/json'
-//    })
-//    response.end(JSON.stringify(appdata))
-//  }else{
-//    const filename = dir + request.url.slice( 1 )
-//    sendFile( response, filename )
-//  }
-//}
-
-//const handlePost = function( request, response ) {
-//  let dataString = ''
-
-//  request.on( 'data', function( data ) {
-//      dataString += data 
-//  })
-
-//  request.on( 'end', function() {
-//    const item = JSON.parse(dataString)
-//    addDerivedField(item)
-//    appdata.push(item)
-//    response.writeHead( 200, {'Content-Type': 'application/json'})
-//    response.end(JSON.stringify(appdata))
-//  })
-//}
-
-//const handleEdit = function(request, response) {
-//  let dataString = ''
-
-//  request.on('data', function(data) {
-//    dataString += data
-//  })
-
-//  request.on('end', function() {
-//    const data = JSON.parse(dataString)
-
-//    appdata[data.index].title = data.item.title
-//    appdata[data.index].type = data.item.type
-//    appdata[data.index].platform = data.item.platform
-
-//    response.writeHead(200, {'Content-Type': 'application/json'})
-
-//    response.end(JSON.stringify(appdata))
-//  })
-//}
-
-//const handleDelete = function(request, response) {
-//  let dataString = ''
-
-//  request.on( 'data', function( data ) {
-//    dataString += data
-//  })
-
-//  request.on('end', function() {
-//    const data = JSON.parse(dataString)
-
-//    appdata.splice(data.index, 1)
-
-//    response.writeHead(200, {'Content-Type': 'application/json'})
-
-//    response.end(JSON.stringify(appdata))
-//  })
-//}
-
-//const sendFile = function( response, filename ) {
-//   const type = mime.getType( filename ) 
-
-//   fs.readFile( filename, function( err, content ) {
-
-     // if the error = null, then we've loaded the file successfully
-//     if( err === null ) {
-
-       // status code: https://httpstatuses.com
-//       response.writeHeader( 200, { 'Content-Type': type })
-//       response.end( content )
-
-//     }else{
-
-       // file not found, error code 404
-//       response.writeHeader( 404 )
-//       response.end( '404 Error: File Not Found' )
-
-//     }
-//   })
-//}
-
-//server.listen( process.env.PORT || port )

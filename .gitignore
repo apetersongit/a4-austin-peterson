@@ -1,0 +1,5 @@
+node_modules/
+.env
+vite-a4/node_modules/
+vite-a4/dist/
+.DS_Store
